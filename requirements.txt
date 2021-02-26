@@ -1,2 +1,10 @@
 Flask==1.1.2
 azureml-core==1.23.0
+fitz==0.0.1.dev2
+pillow == 8.1.0
+google-cloud-vision == 2.2.0
+azure-storage-blob == 12.7.1
+frontend
+tools
+weblib
+pymupdf
