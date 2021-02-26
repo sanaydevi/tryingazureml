@@ -1,0 +1,2 @@
+Flask==1.1.2
+azureml-core==1.23.0
