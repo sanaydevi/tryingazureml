@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "agile-binder-304421",
+  "private_key_id": "1e4ce3b18f752a75ebb52cf8b29ea854e439aa1c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCxHkRhnOT7qVjq\nQq4Y0wLs1suVJ/tgYIfvWqj1he8LXvM8mHrO+rPUvtLIFjR4wLOFFcaInemeaoOj\nc7A/WZzMFe1OT85tLs1NGM+cy7V4CwLDwlPOiejmHR+SP+JLakuHasTVFPc7pOsy\nJ1HUapn4NJ95MV6PSvp2tpDNOWhi6d3rp7JkADxFREBy+LFUFhAT6ao3uMcnq2QP\nrbeaelUfzz1VTl82mRGdpyOGFg4SPVkOHsoO9kHFXxJwFOVe3yBPOXV/3361NxVa\njF7IyEWzSZ+w8yvlyIokPKb0a6HUCO14SlXt1P8AjJtnFwsNTVyYxufFpI6NqSjM\n0iQHqglhAgMBAAECggEAA2V98LRCRNwuvxFHxuSXAAUvcr0JSkQXnzypFEo89wYb\nWnxfEISIucnt/1XDrFQfrSvpenmyvu2yeAoyJUjZ46UA/7kyj2/wEmwpIQvb/0EQ\nzMG3ezS0UWNaFWMhuwn/CEoBG8fy5MMpGnVcEZt4t+SEcV3DvzI0It4l4TWaXZkv\n0nAZ4VCeAjuc9BZ60Vr7KFOYJxEJ6MG8GJcvANXnzRtFmhDQbxNgZRV9bOzQSYiy\neNGLCGq4jxTlrBIWknS1naOVgl8ghz7Fan1kvN2cfN8qSTAx6Ez2D9XVHHKd65S/\nigOQ4OfqIiOfZFT4VIYG4RptSlxFBXJrE0G6b9Os5QKBgQDeKGY7mPk77lusyQXK\nssW0wddZDCFPS9Yq4nh6RS8JxngMchD37Y+Hg7dUPauPtFiv+HWkn0Xmn/2cemt4\n4B6pM424CmBlgrk9h32JbLs/SapzGmNWjceDDZOFLek5uSpfbIdS3F6fw+8smekb\n7Rq8oQox2YRPeJzdDVInVlNv/QKBgQDMGW+9sqKC5Aw8vrBcdAgXbQKv9bmXx4kR\ny9VUJMf7V+ZZggqHixMejkXe/C74T/Fj+edOFSS5f9UcVpHrFfEVhAbDhzDL0Tb5\nOqCV2q5ipCeE7ASVvUUKY6E/3a9MaZCqgrOAc4kAqHkQ57BE4oF6AIklL5bf9gwJ\naHVN6CliNQKBgChh/Zttxjhfrqhs7jGXZ5rg9Y1JSDDK30ZyXmYTd2Z2flH81hrL\nQyDmD4gvoaUAqnJqXrArB6DRil9MXYbebpRhO6ytrjIlnhiSLX6yliL9+A7uSApu\nwUqQSDWYT+HfR9WKu9qTFlxCWJKp85bQ9eA+AcVn/cYYbaM9Dab66TXdAoGAJz70\n56tD6JtlZwDb9MszCx4hGCjOCUuLJermGIoCEmiymJ+S2sF5abS95sTjW0g0CJ9z\nROZ361uTZSGYaXYMp7B9hHeogGi4g3AslOQ6CCm8l6iysQB2GCtURG2iWbUq5j6/\nuYF95KyAqymCEZzkfMtBk+70uhgb9Gsrs1FjM8kCgYEAnflcRSNCsoHA+aXdz/Mb\nAKC9EQCMTXQulTmmGjkfA0+L10YX/f2IFTD8RSD0ztnj082SbZmdWkDu95jjkoOw\nu7VcUA/8pqZV7Fnm9bO/veBCxQc6hDziISoBBO9ukmezeMGS2xzRU1diDdAq152y\nwvuhddc4Hws4xPmbffeq6ng=\n-----END PRIVATE KEY-----\n",
+  "client_email": "readplots@agile-binder-304421.iam.gserviceaccount.com",
+  "client_id": "107898033246660740242",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/readplots%40agile-binder-304421.iam.gserviceaccount.com"
+}

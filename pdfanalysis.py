@@ -4,7 +4,7 @@ from PIL import Image
 from google.cloud import vision
 import os
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/Users/sanaydevi/Downloads/My Project-1e4ce3b18f75.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="My Project-1e4ce3b18f75.json"
 def detect_text(path):
     """Detects text in the file."""
     flag = 0
