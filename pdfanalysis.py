@@ -7,6 +7,8 @@ import os
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="My Project-1e4ce3b18f75.json"
 def detect_text(path):
     """Detects text in the file."""
+    # check if pdf
+
     flag = 0
     client = vision.ImageAnnotatorClient()
 

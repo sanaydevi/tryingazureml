@@ -11,20 +11,52 @@
     <div class="main-block">
       <div class="block-item center">
         <img src="https://www.hcltech.com/sites/default/files/styles/large/public/images/guideline_based1.png?itok=JdASqCkG">
-        <img src="https://www.securitymagazine.com/ext/resources/secenews/2018/fraud-900.jpg?1520959590">
-
         <h1>INSIDER RISK MANAGEMENT</h1>
         <h3>Read email and run ML Model</h3>
         </p>
       </div>
       <div class="block-item center">
-         <form action="/uploader" method=post >
-                <input type=submit value="Button Click">
-            </form>
+            <form class="form-inline" method="POST" action="/uploader">
+          <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon" aria-label="Small">Select The Email Address Of the person whose mailbox you want to scan.</span>
+                <br>
+                <br>
+                    <select name="nameofemail" class="selectpicker show-tick">
+
+                      <option value="sanaydevi@gmail.com">sanaydevi@gmail.com</option>
+                        <option value="kafkahcl@gmail.com">kafkahcl@gmail.com</option>
+
+                    </select>
+              <br>
+                <br>
+
+                <script>
+                    function toggleLoader() {
+                    var x = document.getElementById("loader");
+                    if (x.style.display === "none") {
+                        x.style.display = "block";
+                    } else {
+                        x.style.display = "none";
+                    }
+                }
+                </script>
+                    <button type="submit" class="btn btn-default" onclick="toggleLoader()">Get Results</button>
+                <svg id="loader" width="64px" height="64px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-rolling" style="display:none;"><circle cx="50" cy="50" fill="none" ng-attr-stroke="{{config.color}}" ng-attr-stroke-width="{{config.width}}" ng-attr-r="{{config.radius}}" ng-attr-stroke-dasharray="{{config.dasharray}}" stroke="#3be8b0" stroke-width="10" r="35" stroke-dasharray="164.93361431346415 56.97787143782138" transform="rotate(149.836 50 50)"><animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="1s" begin="0s" repeatCount="indefinite"></animateTransform></circle></svg>
+
+            </div>
+          </div>
+               </form>
+      </div>
+
+<!--         <form action="/uploader" method=post >-->
+<!--                <input type=submit value="Button Click">-->
+<!--            </form>-->
 <!--           <form action="/uploader" method="GET">-->
 <!--        <button class="btn twitter" ></i><span>Scan Email and Run</span></button>-->
 <!--              </form>-->
       </div>
-    </div></center>
+    </div>
+    </center>
   </body>
 </html>

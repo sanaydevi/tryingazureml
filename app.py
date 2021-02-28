@@ -29,7 +29,7 @@
 #         returnString = " ".join(str(x) for x in raw_scores)
 #         return render_template('result.html', var=raw_scores)
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template,redirect,url_for
 from azure.storage.blob import BlobServiceClient
 import imaplib
 import email
@@ -38,6 +38,11 @@ import os
 from azureml.core.workspace import Workspace, Webservice
 import json
 import pdfanalysis as pd
+import collections
+import webbrowser
+
+import textile
+
 
 app = Flask(__name__)
 
@@ -50,12 +55,14 @@ local_path = "./uploads"
 username = "sanaydevi@gmail.com"
 password = "M@nu121227"
 
+dictOfLinks = collections.defaultdict(list)
+mainArrSent = []
 
 def clean(text):
     # clean text for creating a folder
     return "".join(c if c.isalnum() else "_" for c in text)
 
-def readd():
+def readd(emailName):
     # create an IMAP4 class with SSL
     text = ''
     imap = imaplib.IMAP4_SSL("imap.gmail.com",993)
@@ -63,45 +70,60 @@ def readd():
     imap.login(username, password)
     status, messages = imap.select('"[Gmail]/Sent Mail"')
     # number of top emails to fetch
-    N = 2
+    N = 4
     # total number of emails
-    dic = {}
     messages = int(messages[0])
     mainArr  = []
     mainDetails = []
+    uniqueIdentifier = 0
+
     for i in range(messages, messages-N, -1):
         # fetch the email message by ID
         res, msg = imap.fetch(str(i), "(RFC822)")
         stringforAttachement  = "0 Attachements Found"
+        uniqueIdentifier += 1
         for response in msg:
             if isinstance(response, tuple):
+                emailFilename = "emailFolder/Email"+str(uniqueIdentifier)+".txt"
+                emailfile = open(emailFilename, "w")
+
                 details = []
                 # parse a bytes email into a message object
                 msg = email.message_from_bytes(response[1])
+
                 # decode the email subject
                 subject, encoding = decode_header(msg["Subject"])[0]
+
                 if isinstance(subject, bytes):
                     # if it's a bytes, decode to str
                     subject = subject.decode(encoding)
+
                 # decode email sender
                 From, encoding = decode_header(msg.get("From"))[0]
                 to,encoding = decode_header(msg.get("To"))[0]
+
                 if isinstance(to, bytes):
                     to = to.decode(encoding)
                 if isinstance(From, bytes):
                     From = From.decode(encoding)
-                text = subject + " " +From + " " + to
+
+                #text = subject + " " + From + " " + to
+                text = subject
+                metadata = "Subject = "+subject+ " \n From: " + From + "\n To : "+ to
+
+                emailfile.write(metadata)
+
+
                 details.append(subject)
                 details.append(From)
                 details.append(to)
-                emailDetails = subject + " " +From + " " + to
-                # print("Subject:", subject)
-                # print("From:", From)
-                # if the email message is multipart
                 attachmentScore = 0
+
+                # if the email message is multipart
                 if msg.is_multipart():
                     # iterate over email parts
                     attachementCount = 0
+
                     for part in msg.walk():
                         # extract content type of email
                         content_type = part.get_content_type()
@@ -115,7 +137,7 @@ def readd():
                             # print text/plain emails and skip attachments
                             # print(body)
                             text = text + " " + body
-
+                            emailfile.write(text)
                         elif "attachment" in content_disposition:
                             # download attachment
                             filename = part.get_filename()
@@ -128,35 +150,33 @@ def readd():
                                     # make a folder for this email (named after the subject)
                                     os.mkdir(folder_name)
                                 print(filename)
+                                print(folder_name)
+                                print(filename)
 
                                 filepath = os.path.join(folder_name, filename)
+                                xfilepath = os.path.join(folder_name, filename)
+                                print(filepath)
                                 # download attachment and save it
                                 open(filepath, "wb").write(part.get_payload(decode=True))
                                 textfilescore,scoreImageinPDF = pd.seperatePDF(filepath)
                                 attachmentScore += scoreImageinPDF
+                                dictOfLinks[uniqueIdentifier] = [xfilepath]
                 else:
                     # extract content type of email
                     content_type = msg.get_content_type()
+
                     # get the email body
                     body = msg.get_payload(decode=True).decode()
                     text = text + " " + body
+                    emailfile.write(text)
+
                     stringforAttachement = "0 Attachements Found"
-                    # if content_type == "text/plain":
-                    #
-                        # print only text email parts
-                        # print(body)
-                    # if content_type == "text/html":
-                    #     # if it's HTML, create a new HTML file and open it in browser
-                    #     folder_name = clean(subject)
-                    #     if not os.path.isdir(folder_name):
-                    #         # make a folder for this email (named after the subject)
-                    #         os.mkdir(folder_name)
-                    #     filename = "index.html"
-                    #     filepath = os.path.join(folder_name, filename)
-                    #     # write the file
-                    #     open(filepath, "w").write(body)
+
                         # open in the default browser
                         #webbrowser.open(filepath)
+
+                emailfile.close()
+                dictOfLinks[uniqueIdentifier].append(emailFilename)
                 editedTex = "1 | " + text
                 stringg = {"Column1": editedTex}
                 mainArr.append(stringg)
@@ -175,9 +195,6 @@ def readd():
 
                 mainDetails.append(details)
                 print(mainDetails)
-
-                # print("="*100)
-
     # close the connection and logout
     imap.close()
     imap.logout()
@@ -188,6 +205,25 @@ def hello():
 
     return render_template('LandingPage.html')
     #return "Hello, World!"
+
+@app.route('/displayFile', methods=['POST'])
+def openFile():
+    if request.method == "POST":
+        emailNumber = request.form.get('comp_select')
+        print(emailNumber)
+
+        listOfpaths  = dictOfLinks[int(emailNumber)]
+        mainArr= request.form.getlist('item_id')
+
+        for x in listOfpaths:
+
+            # f = open(x, 'r')
+            # file_contents = f.read()
+            # print(file_contents)
+            webbrowser.open('file://' + os.path.realpath(x))
+            #webbrowser.open(x)
+        return render_template('result.html', var=mainArrSent[0],numberOfEmails = len(dictOfLinks))
+
 
 @app.route('/button', methods=["GET", "POST"])
 def button():
@@ -221,7 +257,9 @@ def upload_files():
         return render_template('index.html')
     if request.method == 'POST':
         arr = []
-        mainArr,mainDetails = readd()
+        emailName = request.form.get('nameofemail')
+        print(emailName)
+        mainArr,mainDetails = readd(emailName)
         # [["from","to,"subject"],]
         # editedTex  = "1 | "+t
         # stringg = [{"Column1":editedTex}]
@@ -317,8 +355,9 @@ def upload_files():
         #     res = json.loads(score_result)
         #     raw_scores = (res["Raw Scores"])
         #     arr.append(raw_scores)
+        mainArrSent.append(arr)
 
-        return render_template('result.html', var=arr)
+        return render_template('result.html', var=arr,numberOfEmails = len(dictOfLinks))
 
 
 
