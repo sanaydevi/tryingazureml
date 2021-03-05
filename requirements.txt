@@ -9,3 +9,5 @@ tools
 weblib
 pymupdf
 textile
+xlrd
+openpyxl

@@ -1,34 +1,3 @@
-# from flask import Flask, request, render_template
-# from azureml.core import Workspace, Webservice
-# import json
-#
-# app = Flask(__name__)
-# @app.route("/")
-# def hello():
-#     return render_template('LandingPage.html')
-#
-# @app.route('/uploader', methods=['GET', 'POST'])
-# def upload_files():
-#
-#     if request.method == 'GET':
-#         return render_template('index.html')
-#     if request.method == 'POST':
-#         service_name = 'scoredfraudmodel'
-#         ws = Workspace.get(
-#             name='sdmMachineLearning',
-#             subscription_id='efe60ef5-a4f3-4c91-8037-2f6c88c97246',
-#             resource_group='T12-SDM'
-#         )
-#         service = Webservice(ws, service_name)
-#         with open('uploads/trial.json', 'r') as f:
-#             sample_data = json.load(f)
-#         score_result = service.run(json.dumps(sample_data))
-#         res = json.loads(score_result)
-#         raw_scores = res["Results"]
-#         print(raw_scores)
-#         returnString = " ".join(str(x) for x in raw_scores)
-#         return render_template('result.html', var=raw_scores)
-
 from flask import Flask, request, render_template,redirect,url_for
 from azure.storage.blob import BlobServiceClient
 import imaplib
@@ -70,7 +39,7 @@ def readd(emailName):
     imap.login(username, password)
     status, messages = imap.select('"[Gmail]/Sent Mail"')
     # number of top emails to fetch
-    N = 4
+    N = 10
     # total number of emails
     messages = int(messages[0])
     mainArr  = []
@@ -202,9 +171,35 @@ def readd(emailName):
 
 @app.route("/")
 def hello():
-
-    return render_template('LandingPage.html')
+    return render_template('indexLanding.html')
     #return "Hello, World!"
+
+@app.route('/discoverNav',methods=['GET'])
+def test():
+    if request.method == 'GET':
+        return render_template('eDiscoveryNavigation.html')
+
+@app.route('/readEmail',methods=['GET','POST'])
+def test2():
+    if request.method == 'GET':
+        return render_template('readEmail.html')
+    if request.method == 'POST':
+
+        return render_template('readEmail.html')
+
+@app.route('/dropbox',methods=['GET','POST'])
+def test3():
+    if request.method == 'GET':
+        return render_template('dropbox.html')
+    if request.method == 'POST':
+        return render_template('dropbox.html')
+
+@app.route('/dropboxresult',methods=['GET','POST'])
+def test4():
+    if request.method == 'GET':
+        return render_template('eFileScanResult.html')
+    if request.method == 'POST':
+        return render_template('eFileScanResult.html')
 
 @app.route('/displayFile', methods=['POST'])
 def openFile():
@@ -222,7 +217,7 @@ def openFile():
             # print(file_contents)
             webbrowser.open('file://' + os.path.realpath(x))
             #webbrowser.open(x)
-        return render_template('result.html', var=mainArrSent[0],numberOfEmails = len(dictOfLinks))
+        return render_template('eDiscoveryResult.html', var=mainArrSent[0],numberOfEmails = len(dictOfLinks))
 
 
 @app.route('/button', methods=["GET", "POST"])
@@ -254,7 +249,8 @@ def upload_files():
         return files
 
     if request.method == 'GET':
-        return render_template('index.html')
+        return render_template('eDiscoveryResult.html')
+
     if request.method == 'POST':
         arr = []
         emailName = request.form.get('nameofemail')
@@ -283,81 +279,22 @@ def upload_files():
         for x in results:
 
             if float(x) >= 0.6:
-                mainDetails[i].append("High(" + str(x) + ")")
+                x = str(round(float(x), 2) * 100)
+                mainDetails[i].append("High(" + str(x) + "% )")
             elif float(x) >= 0.5 and float(x) < 0.6:
-                mainDetails[i].append("Medium(" + str(x) + ")")
+                x = str(round(float(x),1 ) * 100)
+                mainDetails[i].append("Medium(" + str(x) + "% )")
             if float(x) < 0.5:
-                mainDetails[i].append("Low(" + str(x) + ")")
+                x = str(round(float(x), 2) * 100)
+
+                mainDetails[i].append("Low(" + str(x) + "% )")
             i += 1
 
         arr = mainDetails
         print(mainDetails)
-
-        # arr.append(" scores =  " + '  |  '.join([str(elem) for elem in tempArr]))
-        # print(arr)
-        # for x in arr:
-        #     print(x)
-        #arr.append(score_result)
-
-        # uploaded_file = request.files.getlist("file[]")
-        # container_name = "container" + str(uuid.uuid4())
-        #
-        # # Create the container
-        # blob_service_client.create_container(container_name)
-        # #
-        # scoreResult = []
-        # for file in uploaded_file:
-        #     filename = secure_filename(file.filename)
-        #     # file_extension = filename.rsplit('.', 1)[1]
-        #     print(filename)
-        #     file.save(os.path.join(local_path, filename))
-        #
-        #     local_file_name = filename
-        #     upload_file_path = os.path.join(local_path, local_file_name)
-        #
-        #     # Create a blob client using the local file name as the name for the blob
-        #     blob_client = blob_service_client.get_blob_client(container=container_name, blob=local_file_name)
-        #
-        #
-        #     print("\nUploading to Azure Storage as blob:\n\t" + local_file_name)
-        #
-        #     # Upload the created file
-        #     with open(upload_file_path, "rb") as data:
-        #         blob_client.upload_blob(data)
-        #
-        # print("\nList blobs in the container")
-        #
-        # container = blob_service_client.get_container_client(container=container_name)
-        #
-        # generator = container.list_blobs()
-        #
-        # arr = []
-        # for blob in generator:
-        #     print("\t Blob name: " + blob.name)
-        #
-        #     service_name = 'scoredfraudmodel'
-        #     ws = Workspace.get(
-        #         name='sdmMachineLearning',
-        #         subscription_id='efe60ef5-a4f3-4c91-8037-2f6c88c97246',
-        #         resource_group='T12-SDM'
-        #     )
-        #     service = Webservice(ws, service_name)
-        #
-        #     url = "https://sdmfilesystem.blob.core.windows.net/" + container_name + "/" + blob.name
-        #     url = r"https://sdmfilesystem.blob.core.windows.net/container6bbf8adb-1958-439a-b01c-7f1bae48befc/samples.json"
-        #
-        #     print(url)
-        #     resp_text = urllib.request.urlopen(url).read().decode('UTF-8')
-        #     # Use loads to decode from text
-        #     json_obj = json.loads(resp_text)
-        #     score_result = service.run(json.dumps(json_obj))
-        #     print(f'Inference result = {score_result}')
-        #     res = json.loads(score_result)
-        #     raw_scores = (res["Raw Scores"])
-        #     arr.append(raw_scores)
         mainArrSent.append(arr)
 
-        return render_template('result.html', var=arr,numberOfEmails = len(dictOfLinks))
+        return render_template('eDiscoveryResult.html', var=arr,numberOfEmails = len(dictOfLinks))
 
 
 

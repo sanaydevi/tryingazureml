@@ -28,6 +28,7 @@ def detect_text(path):
                     for vertex in text.bounding_poly.vertices])
         if len(vertices) > 0:
             flag += 1
+            break
         print('bounds: {}'.format(','.join(vertices)))
 
     if response.error.message:
@@ -39,6 +40,10 @@ def detect_text(path):
 
 
 def seperatePDF(file):
+    findtype = file.rfind('.')
+    if file[findtype+1:] != "pdf":
+        return 0,0
+
     pdf_file = fitz.open(file)
     #file1 = open("textFileGenerated/OutputText.txt", "w")
     scoreImage = 0
@@ -67,5 +72,7 @@ def seperatePDF(file):
             # save it to local disk
             image.save(open(f"images/image{page_index+1}_{image_index}.{image_ext}", "wb"))
             scoreImage += detect_text(f"images/image{page_index+1}_{image_index}.{image_ext}")
+            if scoreImage > 1:
+                break
     return filepciScore,scoreImage
 
